@@ -1,0 +1,63 @@
+import os
+import re
+from yt_dlp import YoutubeDL
+
+def sanitize_filename(filename):
+    # Replace non-ASCII characters and with underscores
+    sanitized = re.sub(r'[^\x00-\x7F<>:"/\\|?*\x00-\x1F\x7F]', '_', filename)
+    # Remove spaces and dots
+    sanitized = sanitized.strip('. ')
+    return sanitized
+
+def download_youtube_audio(url, output_path="."):
+    # Create a YoutubeDL object
+    with YoutubeDL() as ydl:
+        print(f"Fetching video info for: {url}...")
+        info_dict = ydl.extract_info(url, download=False)  # Don't download yet
+        video_title = info_dict.get('title', 'video')  # Get the video title
+
+        # Sanitize the video title
+        sanitized_title = sanitize_filename(video_title)
+        output_file = os.path.join(output_path, f"{sanitized_title}.mp3")
+
+        # Set options for yt-dlp
+        ydl_opts = {
+            'format': 'bestaudio/best',  # Download the best quality audio
+            'outtmpl': output_file,  # Output file name
+            'postprocessors': [{  # Convert to MP3 using ffmpeg
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',  # Needs the best
+            }],
+            'postprocessor_args': [
+                '-threads', '0',  # Use all CPU cores bc why not
+            ],
+            'quiet': True, 
+        }
+
+        # Give it to me Neil
+        print(f"Downloading: {video_title}...")
+        with YoutubeDL(ydl_opts) as ydl_downloader:
+            ydl_downloader.download([url])
+
+        print(f"Download complete: {output_file}")
+        return output_file
+
+def main():
+    # Input YouTube URL
+    youtube_url = input("Enter the YouTube URL: ")
+
+    # Where to save the downloaded MP3
+    output_directory = "downloads"
+
+    # Create the downloads folder if it doesn't exist
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Shake and Bake
+    audio_file = download_youtube_audio(youtube_url, output_directory)
+
+    print(f"MP3 file saved at: {audio_file}")
+
+if __name__ == "__main__":
+    main()
