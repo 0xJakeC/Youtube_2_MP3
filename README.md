@@ -1,5 +1,5 @@
 # Youtube_2_MP3
-Python script that converts Youtube videos to mp3 files using the highest quality (around 5-6mb per song) and saves them locally to a newly created downloads folder
+Python script that converts Youtube videos to mp3 files at 192kbps (around 5-6mb per song) and saves them locally to a newly created downloads folder
 
 
 
