@@ -11,7 +11,9 @@ Enter URL(s) when prompted
 
 Enjoy free mp3 :)
 
+
 *********************************************************************************************************************************************************************
+
 
 Prereq
 
@@ -19,12 +21,14 @@ Prereq
 
    python3 --version
 
+
    
 2. ffmeg
 
    sudo apt install ffmeg
    
    ffmpeg -version
+
 
 
 4. yt-dlp
