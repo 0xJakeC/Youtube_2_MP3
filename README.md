@@ -23,6 +23,7 @@ Prereq
 2. ffmeg
 
    sudo apt install ffmeg
+   
    ffmpeg -version
 
 
